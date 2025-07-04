@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
+import 'authentication_page.dart';
 import 'firebase_options.dart';
 import 'home_view.dart';
 
@@ -19,7 +20,7 @@ Future<void> main() async {
 
   runApp(const MaterialApp(
     home: Scaffold(
-      body: HomePage(),
+      body: AuthenticationPage(),
     ),
   ));
 }

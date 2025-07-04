@@ -8,6 +8,7 @@ import 'dart:convert' show json;
 import 'package:http/http.dart' as http;
 import 'main.dart';
 import 'src/web_wrapper.dart' as web;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// The scopes required by this application.
 // #docregion CheckAuthorization
@@ -42,13 +43,15 @@ class _HomePageState extends State<HomePage> {
       signIn
           .initialize(
             // clientId: '21321383900-vik2q86s5p3iqhsuvdk77e1jbebp2rkj.apps.googleusercontent.com',
-            serverClientId: '21321383900-vik2q86s5p3iqhsuvdk77e1jbebp2rkj.apps.googleusercontent.com',
+            // serverClientId: '21321383900-vik2q86s5p3iqhsuvdk77e1jbebp2rkj.apps.googleusercontent.com',
+            serverClientId: dotenv.env['CLIENT_ID'],
           )
           .then((_) {
         print('........................... then method');
-            signIn.authenticationEvents
-                .listen(_handleAuthenticationEvent)
-                .onError(_handleAuthenticationError);
+
+            // signIn.authenticationEvents
+            //     .listen(_handleAuthenticationEvent)
+            //     .onError(_handleAuthenticationError);
 
             FirebaseAuth.instanceFor(app: app).authStateChanges().listen((User? user) {
               if(user == null) {
@@ -110,6 +113,8 @@ class _HomePageState extends State<HomePage> {
       _errorMessage = e is GoogleSignInException
           ? '.....................1 GoogleSignInException ${e.code}: ${e.description}'
           : 'Unknown error: $e';
+
+      print('........................... _errorMessage: $_errorMessage');
     });
   }
 
@@ -325,6 +330,8 @@ class _HomePageState extends State<HomePage> {
               print('........................... idToken: $idToken');
               // print('........................... accessToken: $accessToken');
 
+              print('........................... googleSignInAccount.photoUrl: ${googleSignInAccount.photoUrl}');
+
               OAuthCredential googleAuthCredentials = GoogleAuthProvider.credential(
                 idToken: idToken,
                 // accessToken: accessToken,
@@ -335,7 +342,12 @@ class _HomePageState extends State<HomePage> {
               User? user = userCredential.user;
 
               print('........................... user (on sign in pressed) : ${user?.displayName}');
+              print('........................... user?.photoURL: ${user?.photoURL}');
             } catch (e) {
+              String error = e is GoogleSignInException
+                  ? '..................... error GoogleSignInException ${e.code}: ${e.description}'
+                  : 'Unknown error: $e';
+              print('........................... error: $error');
               // #enddocregion ExplicitSignIn
               _errorMessage = e.toString();
               // #docregion ExplicitSignIn
