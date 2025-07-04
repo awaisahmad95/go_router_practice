@@ -74,49 +74,49 @@ class _HomePageState extends State<HomePage> {
     // #enddocregion Setup
   }
 
-  Future<void> _handleAuthenticationEvent(
-    GoogleSignInAuthenticationEvent event,
-  ) async {
-    print('........................... event: $event');
-    // #docregion CheckAuthorization
-    final GoogleSignInAccount? user = // ...
-        // #enddocregion CheckAuthorization
-        switch (event) {
-          GoogleSignInAuthenticationEventSignIn() => event.user,
-          GoogleSignInAuthenticationEventSignOut() => null,
-        };
+  // Future<void> _handleAuthenticationEvent(
+  //   GoogleSignInAuthenticationEvent event,
+  // ) async {
+  //   print('........................... event: $event');
+  //   // #docregion CheckAuthorization
+  //   final GoogleSignInAccount? user = // ...
+  //       // #enddocregion CheckAuthorization
+  //       switch (event) {
+  //         GoogleSignInAuthenticationEventSignIn() => event.user,
+  //         GoogleSignInAuthenticationEventSignOut() => null,
+  //       };
+  //
+  //   // Check for existing authorization.
+  //   // #docregion CheckAuthorization
+  //   final GoogleSignInClientAuthorization? authorization = await user
+  //       ?.authorizationClient
+  //       .authorizationForScopes(scopes);
+  //   // #enddocregion CheckAuthorization
+  //
+  //   setState(() {
+  //     _currentUser = user;
+  //     _isAuthorized = authorization != null;
+  //     _errorMessage = '';
+  //   });
+  //
+  //   // If the user has already granted access to the required scopes, call the
+  //   // REST API.
+  //   if (user != null && authorization != null) {
+  //     unawaited(_handleGetContact(user));
+  //   }
+  // }
 
-    // Check for existing authorization.
-    // #docregion CheckAuthorization
-    final GoogleSignInClientAuthorization? authorization = await user
-        ?.authorizationClient
-        .authorizationForScopes(scopes);
-    // #enddocregion CheckAuthorization
-
-    setState(() {
-      _currentUser = user;
-      _isAuthorized = authorization != null;
-      _errorMessage = '';
-    });
-
-    // If the user has already granted access to the required scopes, call the
-    // REST API.
-    if (user != null && authorization != null) {
-      unawaited(_handleGetContact(user));
-    }
-  }
-
-  Future<void> _handleAuthenticationError(Object e) async {
-    setState(() {
-      _currentUser = null;
-      _isAuthorized = false;
-      _errorMessage = e is GoogleSignInException
-          ? '.....................1 GoogleSignInException ${e.code}: ${e.description}'
-          : 'Unknown error: $e';
-
-      print('........................... _errorMessage: $_errorMessage');
-    });
-  }
+  // Future<void> _handleAuthenticationError(Object e) async {
+  //   setState(() {
+  //     _currentUser = null;
+  //     _isAuthorized = false;
+  //     _errorMessage = e is GoogleSignInException
+  //         ? '.....................1 GoogleSignInException ${e.code}: ${e.description}'
+  //         : 'Unknown error: $e';
+  //
+  //     print('........................... _errorMessage: $_errorMessage');
+  //   });
+  // }
 
   // Calls the People API REST endpoint for the signed-in user to retrieve information.
   Future<void> _handleGetContact(GoogleSignInAccount user) async {
