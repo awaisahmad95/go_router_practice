@@ -23,19 +23,19 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
       error = '';
       if(user == null) {
         setState(() {});
-        print('........................... SIGNED OUT');
+        debugPrint('........................... SIGNED OUT');
       } else {
         // user.reload();
         setState(() {});
-        print('........................... SIGNED IN (uid: ${user.uid}, isAnonymous: ${user.isAnonymous})');
+        debugPrint('........................... SIGNED IN (uid: ${user.uid}, isAnonymous: ${user.isAnonymous})');
       }
     });
 
     // FirebaseAuth.instanceFor(app: app).authStateChanges().listen((User? user) {
     //   if(user == null) {
-    //     print('........................... SIGNED OUT');
+    //     debugPrint('........................... SIGNED OUT');
     //   } else {
-    //     print('........................... SIGNED IN (uid: ${user.uid}, isAnonymous: ${user.isAnonymous})');
+    //     debugPrint('........................... SIGNED IN (uid: ${user.uid}, isAnonymous: ${user.isAnonymous})');
     //   }
     // });
 
@@ -106,16 +106,18 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
 
                           OAuthCredential googleAuthCredentials = GoogleAuthProvider.credential(idToken: idToken,);
 
+                          // FirebaseAuth.instance.fetchSignInMethodsForEmail('email');
+
                           UserCredential userCredential = await FirebaseAuth.instanceFor(app: app).signInWithCredential(googleAuthCredentials);
 
                           User? user = userCredential.user;
 
-                          print('..................... google sign in | uid ${user?.uid}');
-                          print('..................... google sign in | displayName ${user?.displayName}');
-                          print('..................... google sign in | photoURL ${user?.photoURL}');
-                          print('..................... google sign in | email ${user?.email}');
-                          print('..................... google sign in | emailVerified ${user?.emailVerified}');
-                          print('..................... google sign in | phoneNumber ${user?.phoneNumber}');
+                          debugPrint('..................... google sign in | uid ${user?.uid}');
+                          debugPrint('..................... google sign in | displayName ${user?.displayName}');
+                          debugPrint('..................... google sign in | photoURL ${user?.photoURL}');
+                          debugPrint('..................... google sign in | email ${user?.email}');
+                          debugPrint('..................... google sign in | emailVerified ${user?.emailVerified}');
+                          debugPrint('..................... google sign in | phoneNumber ${user?.phoneNumber}');
 
                           error = '';
                           setState(() {});
@@ -125,7 +127,7 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
                               : 'Unknown error: $e';
                           this.error = error;
                           setState(() {});
-                          print('........................... google sign in error: $error');
+                          debugPrint('........................... google sign in error: $error');
                         }
                       },
                       child: const Text('Continue With Google'),
@@ -142,22 +144,22 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
 
                           User? user = credential.user;
 
-                          print('..................... sign in | uid ${user?.uid}');
-                          print('..................... sign in | displayName ${user?.displayName}');
-                          print('..................... sign in | photoURL ${user?.photoURL}');
-                          print('..................... sign in | email ${user?.email}');
-                          print('..................... sign in | emailVerified ${user?.emailVerified}');
-                          print('..................... sign in | phoneNumber ${user?.phoneNumber}');
+                          debugPrint('..................... sign in | uid ${user?.uid}');
+                          debugPrint('..................... sign in | displayName ${user?.displayName}');
+                          debugPrint('..................... sign in | photoURL ${user?.photoURL}');
+                          debugPrint('..................... sign in | email ${user?.email}');
+                          debugPrint('..................... sign in | emailVerified ${user?.emailVerified}');
+                          debugPrint('..................... sign in | phoneNumber ${user?.phoneNumber}');
 
                           error = '';
                           setState(() {});
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'user-not-found') {
-                            print('..................... sign in ${e.code} : ${e.message}');
+                            debugPrint('..................... sign in ${e.code} : ${e.message}');
                           } else if (e.code == 'wrong-password') {
-                            print('..................... sign in ${e.code} : ${e.message}');
+                            debugPrint('..................... sign in ${e.code} : ${e.message}');
                           } else if (e.code == 'invalid-credentials') {
-                            print('..................... sign in ${e.code} : ${e.message}');
+                            debugPrint('..................... sign in ${e.code} : ${e.message}');
                           }
 
                           error = '${e.code} | ${e.message}';
@@ -181,20 +183,20 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
 
                           User? user = credential.user;
 
-                          print('..................... sign up | uid ${user?.uid}');
-                          print('..................... sign up | displayName ${user?.displayName}');
-                          print('..................... sign up | photoURL ${user?.photoURL}');
-                          print('..................... sign up | email ${user?.email}');
-                          print('..................... sign up | emailVerified ${user?.emailVerified}');
-                          print('..................... sign up | phoneNumber ${user?.phoneNumber}');
+                          debugPrint('..................... sign up | uid ${user?.uid}');
+                          debugPrint('..................... sign up | displayName ${user?.displayName}');
+                          debugPrint('..................... sign up | photoURL ${user?.photoURL}');
+                          debugPrint('..................... sign up | email ${user?.email}');
+                          debugPrint('..................... sign up | emailVerified ${user?.emailVerified}');
+                          debugPrint('..................... sign up | phoneNumber ${user?.phoneNumber}');
 
                           error = '';
                           setState(() {});
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'weak-password') {
-                            print('..................... sign up ${e.code} : ${e.message}');
+                            debugPrint('..................... sign up ${e.code} : ${e.message}');
                           } else if (e.code == 'email-already-in-use') {
-                            print('..................... sign up ${e.code} : ${e.message}');
+                            debugPrint('..................... sign up ${e.code} : ${e.message}');
                           }
 
                           error = '${e.code} | ${e.message}';
@@ -202,7 +204,7 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
                         } catch (e) {
                           error = e.toString();
                           setState(() {});
-                          print(e);
+                          debugPrint(e.toString());
                         }
                       },
                       child: Text('Sign Up'),
@@ -212,12 +214,15 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
                     ElevatedButton(
                       onPressed: () async {
                         await FirebaseAuth.instance.signOut();
-                        print('..................... SIGNED OUT');
+                        debugPrint('..................... SIGNED OUT');
 
                         setState(() {});
-                        ScaffoldMessenger.of(context).showSnackBar(
+
+                        if(context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('SIGNED OUT'))
                         );
+                        }
                       },
                       child: Text('Sign Out'),
                     ),
@@ -229,7 +234,7 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
 
                           for (final providerProfile in user!.providerData) {
                             // ID of the provider (google.com, apple.com, etc.)
-                            print('..................... providerProfile.providerId: ${providerProfile.providerId}');
+                            debugPrint('..................... providerProfile.providerId: ${providerProfile.providerId}');
 
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text(providerProfile.providerId))
@@ -246,13 +251,15 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
 
                           await user?.updateDisplayName(emailController.text);
 
-                          print('..................... updatedDisplayName: ${user?.displayName}');
+                          debugPrint('..................... updatedDisplayName: ${user?.displayName}');
 
                           setState(() {});
 
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          if(context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('Display name updated successfully'))
                           );
+                          }
                         },
                         child: Text('Update Display Name'),
                       ),
@@ -264,13 +271,15 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
 
                           await user?.updatePhotoURL(emailController.text);
 
-                          print('..................... updatedPhotoURL: ${user?.photoURL}');
+                          debugPrint('..................... updatedPhotoURL: ${user?.photoURL}');
 
                           setState(() {});
 
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          if(context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('Photo URL updated successfully'))
                           );
+                          }
                         },
                         child: Text('Update Photo URL'),
                       ),
@@ -282,13 +291,15 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
 
                           await user?.verifyBeforeUpdateEmail(emailController.text);
 
-                          print('..................... updatedEmail: ${user?.email}');
+                          debugPrint('..................... updatedEmail: ${user?.email}');
 
                           setState(() {});
 
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          if(context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('Email updated successfully'))
                           );
+                          }
                         },
                         child: Text('Update Email'),
                       ),
@@ -301,11 +312,13 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
                           await FirebaseAuth.instance.setLanguageCode('en');
                           await user?.sendEmailVerification();
 
-                          print('..................... sendEmailVerification | isEmailVerified: ${user?.emailVerified}');
+                          debugPrint('..................... sendEmailVerification | isEmailVerified: ${user?.emailVerified}');
 
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          if(context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('Verification Email sent successfully'))
                           );
+                          }
                         },
                         child: Text('Send Verification Email'),
                       ),
@@ -317,11 +330,13 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
 
                           await user?.updatePassword(passwordController.text);
 
-                          print('..................... Password updated successfully');
+                          debugPrint('..................... Password updated successfully');
 
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          if(context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('Password updated successfully'))
                           );
+                          }
                         },
                         child: Text('Update Password'),
                       ),
@@ -332,11 +347,13 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
                           await FirebaseAuth.instance.setLanguageCode('en');
                           await FirebaseAuth.instance.sendPasswordResetEmail(email: FirebaseAuth.instance.currentUser!.email!);
 
-                          print('..................... Password reset email sent successfully');
+                          debugPrint('..................... Password reset email sent successfully');
 
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          if(context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('Password reset email sent successfully'))
                           );
+                          }
                         },
                         child: Text('Send Password Reset Email'),
                       ),
@@ -346,13 +363,15 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
                         onPressed: () async {
                           await FirebaseAuth.instance.currentUser!.delete();
 
-                          print('..................... User deleted successfully');
+                          debugPrint('..................... User deleted successfully');
 
                           setState(() {});
 
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          if(context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('User deleted successfully'))
                           );
+                          }
                         },
                         child: Text('Delete User'),
                       ),
@@ -379,19 +398,21 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
 
                             User? user = userCredential?.user;
 
-                            print('..................... google sign in | re-authenticate | uid ${user?.uid}');
-                            print('..................... google sign in | re-authenticate | displayName ${user?.displayName}');
-                            print('..................... google sign in | re-authenticate | photoURL ${user?.photoURL}');
-                            print('..................... google sign in | re-authenticate | email ${user?.email}');
-                            print('..................... google sign in | re-authenticate | emailVerified ${user?.emailVerified}');
-                            print('..................... google sign in | re-authenticate | phoneNumber ${user?.phoneNumber}');
+                            debugPrint('..................... google sign in | re-authenticate | uid ${user?.uid}');
+                            debugPrint('..................... google sign in | re-authenticate | displayName ${user?.displayName}');
+                            debugPrint('..................... google sign in | re-authenticate | photoURL ${user?.photoURL}');
+                            debugPrint('..................... google sign in | re-authenticate | email ${user?.email}');
+                            debugPrint('..................... google sign in | re-authenticate | emailVerified ${user?.emailVerified}');
+                            debugPrint('..................... google sign in | re-authenticate | phoneNumber ${user?.phoneNumber}');
 
                             error = '';
                             setState(() {});
 
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            if(context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Google User re-authenticated successfully'))
                             );
+                            }
                           } catch (e) {
                             String error = e is GoogleSignInException
                                 ? '..................... GoogleSignInException  | re-authenticate | ${e.code}: ${e.description}'
@@ -399,7 +420,7 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
 
                             error = e.toString();
                             setState(() {});
-                            print('........................... google sign in error  | re-authenticate: $error');
+                            debugPrint('........................... google sign in error  | re-authenticate: $error');
                           }
                         },
                         child: Text('Re-authenticate Google User'),
@@ -420,29 +441,33 @@ class _EmailPasswordSignInState extends State<AuthenticationPage> {
 
                             User? user = userCredential?.user;
 
-                            print('..................... sign in | re-authenticate | uid ${user?.uid}');
-                            print('..................... sign in | re-authenticate | displayName ${user?.displayName}');
-                            print('..................... sign in | re-authenticate | photoURL ${user?.photoURL}');
-                            print('..................... sign in | re-authenticate | email ${user?.email}');
-                            print('..................... sign in | re-authenticate | emailVerified ${user?.emailVerified}');
-                            print('..................... sign in | re-authenticate | phoneNumber ${user?.phoneNumber}');
+                            debugPrint('..................... sign in | re-authenticate | uid ${user?.uid}');
+                            debugPrint('..................... sign in | re-authenticate | displayName ${user?.displayName}');
+                            debugPrint('..................... sign in | re-authenticate | photoURL ${user?.photoURL}');
+                            debugPrint('..................... sign in | re-authenticate | email ${user?.email}');
+                            debugPrint('..................... sign in | re-authenticate | emailVerified ${user?.emailVerified}');
+                            debugPrint('..................... sign in | re-authenticate | phoneNumber ${user?.phoneNumber}');
 
                             error = '';
                             setState(() {});
 
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            if(context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Email User re-authenticated successfully'))
                             );
+                            }
                           } on FirebaseAuthException catch (e) {
                             if (e.code == 'user-not-found') {
-                              print('..................... sign in | re-authenticate ${e.code} : ${e.message}');
+                              debugPrint('..................... sign in | re-authenticate ${e.code} : ${e.message}');
                             } else if (e.code == 'wrong-password') {
-                              print('..................... sign in | re-authenticate ${e.code} : ${e.message}');
+                              debugPrint('..................... sign in | re-authenticate ${e.code} : ${e.message}');
                             } else if (e.code == 'invalid-credentials') {
-                              print('..................... sign in | re-authenticate ${e.code} : ${e.message}');
+                              debugPrint('..................... sign in | re-authenticate ${e.code} : ${e.message}');
                             }
 
                             error = '${e.code} | ${e.message}';
+
+                            setState(() {});
                           } catch(e) {
                             error = e.toString();
                             setState(() {});
