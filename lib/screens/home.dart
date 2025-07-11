@@ -1,3 +1,4 @@
+/*
 import 'dart:async';
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:convert' show json;
 import 'package:http/http.dart' as http;
-import 'main.dart';
-import 'src/web_wrapper.dart' as web;
+import '../main.dart';
+import '../src/web_wrapper.dart' as web;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// The scopes required by this application.
@@ -380,3 +381,40 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+*/
+
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home Page'),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                context.push('/home/profile');
+              },
+              child: Text('Go to Profile Page'),
+            ),
+            SizedBox(height: 20,),
+            ElevatedButton(
+              onPressed: () {
+                context.push('/home/settings');
+              },
+              child: Text('Go to Settings Page'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

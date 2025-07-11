@@ -3,14 +3,25 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
-import 'authentication_page.dart';
+import 'package:go_router_practice/screens/change_password.dart';
+import 'package:go_router_practice/screens/main_view.dart';
+import 'package:go_router_practice/screens/profile.dart';
+import 'package:go_router_practice/screens/settings.dart';
+import 'package:go_router_practice/screens/shop.dart';
+import 'package:go_router_practice/screens/shop_detail.dart';
+import 'package:go_router_practice/screens/splash.dart';
 import 'firebase_options.dart';
-import 'home_view.dart';
+import 'screens/home.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 late FirebaseApp app;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  usePathUrlStrategy();
+
+  GoRouter.optionURLReflectsImperativeAPIs = true;
 
   await dotenv.load();
 
@@ -18,18 +29,71 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MaterialApp(
-    home: Scaffold(
-      body: AuthenticationPage(),
+  // runApp(const MaterialApp(
+  //   home: Scaffold(
+  //     body: AuthenticationPage(),
+  //   ),
+  // ));
+
+  runApp(
+    MaterialApp.router(
+      routerConfig: router2,
+      title: 'Go Router Practice',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
     ),
-  ));
+  );
 }
 
 // Create keys for `root` & `section` navigator avoiding unnecessary rebuilds
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _sectionNavigatorKey = GlobalKey<NavigatorState>();
+final _shellNavigatorKeyTab1 = GlobalKey<NavigatorState>();
+final _shellNavigatorKeyTab2 = GlobalKey<NavigatorState>();
 
-final router = GoRouter(
+// final router1 = GoRouter(
+//   navigatorKey: _rootNavigatorKey,
+//   initialLocation: '/splash',
+//   routes: <RouteBase>[
+//     GoRoute(
+//       path: '/splash',
+//       parentNavigatorKey: _rootNavigatorKey,
+//       builder: (context, state) => const Splash(),
+//     ),
+//     ShellRoute(
+//       navigatorKey: _shellNavigatorKeyTab1,
+//       builder: (context, state, navigationShell) {
+//         // Return the widget that implements the custom shell (e.g a BottomNavigationBar).
+//         // The [StatefulNavigationShell] is passed to be able to navigate to other branches in a stateful way.
+//         return MainView(navigationShell);
+//       },
+//       routes: [
+//         // The route branch for the 1 Tab
+//         GoRoute(
+//           parentNavigatorKey: _shellNavigatorKeyTab1,
+//           path: '/home',
+//           builder: (context, state) => const HomePage(),
+//         ),
+//
+//         // The route branch for 2º Tab
+//         GoRoute(
+//           parentNavigatorKey: _shellNavigatorKeyTab1,
+//           path: '/shop',
+//           builder: (context, state) => const ShopPage(),
+//           routes: <RouteBase>[
+//             GoRoute(
+//               parentNavigatorKey: _shellNavigatorKeyTab1,
+//               path: 'shopDetail/:id/:key',
+//               builder: (context, state) => const ShopDetailPage(),
+//             ),
+//           ],
+//         ),
+//       ],
+//     ),
+//   ],
+// );
+
+final router2 = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: '/splash',
   routes: <RouteBase>[
@@ -38,31 +102,60 @@ final router = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const Splash(),
     ),
-    ShellRoute(
-      navigatorKey: _sectionNavigatorKey,
+    StatefulShellRoute.indexedStack(
+      // parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state, navigationShell) {
         // Return the widget that implements the custom shell (e.g a BottomNavigationBar).
         // The [StatefulNavigationShell] is passed to be able to navigate to other branches in a stateful way.
         return MainView(navigationShell);
       },
-      routes: [
+      branches: [
         // The route branch for the 1 Tab
-        GoRoute(
-          parentNavigatorKey: _sectionNavigatorKey,
-          path: '/home',
-          builder: (context, state) => const HomePage(),
+        StatefulShellBranch(
+          navigatorKey: _shellNavigatorKeyTab1,
+          routes: [
+            GoRoute(
+              // parentNavigatorKey: _shellNavigatorKeyTab1,
+              path: '/home',
+              builder: (context, state) => const HomePage(),
+              routes: [
+                GoRoute(
+                  // parentNavigatorKey: _shellNavigatorKeyTab1,
+                  path: '/profile',
+                  builder: (context, state) => const ProfilePage(),
+                  routes: [
+                    GoRoute(
+                      // parentNavigatorKey: _shellNavigatorKeyTab1,
+                      path: '/changePassword',
+                      builder: (context, state) => const ChangePasswordPage(),
+                    ),
+                  ],
+                ),
+                GoRoute(
+                  // parentNavigatorKey: _shellNavigatorKeyTab1,
+                  path: '/settings',
+                  builder: (context, state) => const SettingsPage(),
+                ),
+              ],
+            ),
+          ],
         ),
 
         // The route branch for 2º Tab
-        GoRoute(
-          parentNavigatorKey: _sectionNavigatorKey,
-          path: '/shop',
-          builder: (context, state) => const ShopPage(),
+        StatefulShellBranch(
+          navigatorKey: _shellNavigatorKeyTab2,
           routes: <RouteBase>[
             GoRoute(
-              parentNavigatorKey: _sectionNavigatorKey,
-              path: 'shopDetail/:id/:key',
-              builder: (context, state) => const ShopDetailPage(),
+              // parentNavigatorKey: _shellNavigatorKeyTab2,
+              path: '/shop',
+              builder: (context, state) => const ShopPage(),
+              routes: <RouteBase>[
+                GoRoute(
+                  // parentNavigatorKey: _shellNavigatorKeyTab2,
+                  path: 'shopDetail/:id/:key',
+                  builder: (context, state) => const ShopDetailPage(),
+                ),
+              ],
             ),
           ],
         ),
@@ -70,134 +163,3 @@ final router = GoRouter(
     ),
   ],
 );
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    // Person person = Person(firstName: 'firstName', lastName: 'lastName', age: 19);
-    // Person.fromJson({});
-
-    return MaterialApp.router(
-      routerConfig: router,
-      title: 'Go Router Practice',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      // builder: (context, child) {
-      //   return Center(
-      //     child: ColoredBox(
-      //       color: Colors.red,
-      //       child: child ?? const SizedBox(
-      //         width: 200,
-      //         height: 200,
-      //       ),
-      //     ),
-      //   );
-      // },
-    );
-  }
-}
-
-class MainView extends StatefulWidget {
-  const MainView(this.navigationShell, {super.key});
-
-  /// The navigation shell and container for the branch Navigators.
-  final Widget navigationShell;
-
-  @override
-  State<MainView> createState() => _MainViewState();
-}
-
-class _MainViewState extends State<MainView> {
-  // final _pageViewController = PageController();
-
-  // int _activePage = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    // print(navigationShell.currentIndex);
-    return Scaffold(
-      body: widget.navigationShell,
-      bottomNavigationBar: BottomNavigationBar(
-        // currentIndex: navigationShell.currentIndex,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'Shop'),
-        ],
-        onTap: (index) {
-          _onTap(index, context);
-        },
-      ),
-    );
-  }
-
-  void _onTap(int index, BuildContext context) {
-    debugPrint('index: $index');
-    (index == 0) ? context.go('/home') : context.go('/shop');
-    // _pageViewController.animateToPage(index, duration: Duration(milliseconds: 200), curve: Curves.linear);
-
-    // navigationShell.goBranch(
-    //   index,
-    //   // A common pattern when using bottom navigation bars is to support
-    //   // navigating to the initial location when tapping the item that is
-    //   // already active. This example demonstrates how to support this behavior,
-    //   // using the initialLocation parameter of goBranch.
-    //   initialLocation: index == navigationShell.currentIndex,
-    // );
-  }
-}
-
-class Splash extends StatelessWidget {
-  const Splash({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          context.go('/home');
-        },
-        child: Text('NEXT'),
-      ),
-    );
-  }
-}
-
-class ShopPage extends StatelessWidget {
-  const ShopPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          context.go('/shop/shopDetail/10/gh6fft6c');
-        },
-        child: Text('SHOP'),
-      ),
-    );
-  }
-}
-
-class ShopDetailPage extends StatelessWidget {
-  const ShopDetailPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          context.pop();
-        },
-        child: Text('SHOP DETAIL'),
-      ),
-    );
-  }
-}
