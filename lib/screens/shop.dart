@@ -13,9 +13,14 @@ class ShopPage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            context.go('/shop/shopDetail/10/gh6fft6c');
+            // context.push('/shop/shopDetail/10/gh6fft6c');
+            // context.pushNamed('shopDetail/10/gh6fft6c');
+            context.pushNamed('shopDetail', pathParameters: {
+              'id': '10',
+              'key': 'gh6fft6c',
+            });
           },
-          child: Text('SHOP'),
+          child: Text('Go To Shop Detail Page'),
         ),
       ),
     );

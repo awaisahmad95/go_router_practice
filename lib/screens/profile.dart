@@ -14,7 +14,8 @@ class ProfilePage extends StatelessWidget {
         child: ElevatedButton(
           onPressed: () {
             // context.go('/shop/shopDetail/10/gh6fft6c');
-            context.push('/home/profile/changePassword');
+            // context.push('/home/profile/changePassword');
+            context.pushNamed('changePassword');
           },
           child: Text('Go to Change Password Page'),
         ),

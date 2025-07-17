@@ -400,16 +400,30 @@ class HomePage extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                context.push('/home/profile');
+                // context.push('/home/profile');
+                context.pushNamed('profile');
               },
               child: Text('Go to Profile Page'),
             ),
             SizedBox(height: 20,),
             ElevatedButton(
               onPressed: () {
-                context.push('/home/settings');
+                // context.push('/home/settings');
+                context.pushNamed('settings');
               },
               child: Text('Go to Settings Page'),
+            ),
+            SizedBox(height: 20,),
+            ElevatedButton(
+              onPressed: () {
+                // context.go('/shop/shopDetail/10/gh6fft6c');
+                // context.pushNamed('shopDetail/10/gh6fft6c');
+                context.pushNamed('shopDetail', pathParameters: {
+                  'id': '10',
+                  'key': 'gh6fft6c',
+                });
+              },
+              child: Text('Go To Shop Detail Page'),
             ),
           ],
         ),

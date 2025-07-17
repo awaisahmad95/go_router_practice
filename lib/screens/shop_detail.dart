@@ -15,7 +15,7 @@ class ShopDetailPage extends StatelessWidget {
           onPressed: () {
             context.pop();
           },
-          child: Text('SHOP DETAIL'),
+          child: Text('Go Back'),
         ),
       ),
     );

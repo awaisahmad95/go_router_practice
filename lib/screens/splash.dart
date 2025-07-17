@@ -13,7 +13,8 @@ class Splash extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            context.go('/home');
+            // context.go('/home');
+            context.goNamed('home');
           },
           child: Text('NEXT'),
         ),

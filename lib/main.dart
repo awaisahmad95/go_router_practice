@@ -12,7 +12,7 @@ import 'package:go_router_practice/screens/shop_detail.dart';
 import 'package:go_router_practice/screens/splash.dart';
 import 'firebase_options.dart';
 import 'screens/home.dart';
-import 'package:flutter_web_plugins/url_strategy.dart';
+import 'use_path_url_strategy.dart' if (dart.library.html) 'package:flutter_web_plugins/url_strategy.dart';
 
 late FirebaseApp app;
 
@@ -99,6 +99,7 @@ final router2 = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/splash',
+      name: 'splash',
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const Splash(),
     ),
@@ -117,16 +118,19 @@ final router2 = GoRouter(
             GoRoute(
               // parentNavigatorKey: _shellNavigatorKeyTab1,
               path: '/home',
+              name: 'home',
               builder: (context, state) => const HomePage(),
               routes: [
                 GoRoute(
                   // parentNavigatorKey: _shellNavigatorKeyTab1,
                   path: '/profile',
+                  name: 'profile',
                   builder: (context, state) => const ProfilePage(),
                   routes: [
                     GoRoute(
                       // parentNavigatorKey: _shellNavigatorKeyTab1,
                       path: '/changePassword',
+                      name: 'changePassword',
                       builder: (context, state) => const ChangePasswordPage(),
                     ),
                   ],
@@ -134,6 +138,7 @@ final router2 = GoRouter(
                 GoRoute(
                   // parentNavigatorKey: _shellNavigatorKeyTab1,
                   path: '/settings',
+                  name: 'settings',
                   builder: (context, state) => const SettingsPage(),
                 ),
               ],
@@ -148,11 +153,13 @@ final router2 = GoRouter(
             GoRoute(
               // parentNavigatorKey: _shellNavigatorKeyTab2,
               path: '/shop',
+              name: 'shop',
               builder: (context, state) => const ShopPage(),
               routes: <RouteBase>[
                 GoRoute(
-                  // parentNavigatorKey: _shellNavigatorKeyTab2,
+                  // parentNavigatorKey: _rootNavigatorKey,
                   path: 'shopDetail/:id/:key',
+                  name: 'shopDetail',
                   builder: (context, state) => const ShopDetailPage(),
                 ),
               ],
